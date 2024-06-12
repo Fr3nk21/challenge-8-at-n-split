@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -19,14 +21,31 @@ const initialFriends = [
   },
 ];
 
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 export default function App() {
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  function handleShowAddFriend() {
+    setShowAddFriend((show) => !show);
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList />;
-        <NewFriends />
-        <Bill />
+        <FriendsList />
+        {showAddFriend && <FormAddFriend />}
+        <Button onClick={handleShowAddFriend}>
+          {showAddFriend ? "Close" : "Add friend"}
+        </Button>
       </div>
+      <FormSplitBill />
     </div>
   );
 }
@@ -77,7 +96,7 @@ function Friend({ friend }) {
       )}
 
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
-      <button className="button">Select</button>
+      <Button>Select</Button>
     </li>
   );
   // return (
@@ -96,49 +115,83 @@ function Friend({ friend }) {
   // );
 }
 
-function NewFriends() {
+function FormAddFriend() {
   return (
-    <div>
-      <ul>
-        <li>
-          <label>Friend name</label>
-          <input type="text"></input>
-        </li>
-        <li>
-          <label>Image URL</label>
-          <input type="text"></input>
-        </li>
-        <button className="button">Add</button>
-      </ul>
-    </div>
+    <form className="form-add-friend">
+      <label>👬 Friend name</label>
+      <input type="text" />
+
+      <label>🌄 Image URL</label>
+      <input type="text" />
+
+      <Button>Add</Button>
+    </form>
   );
+
+  // return (
+  //   <div>
+  //     <ul>
+  //       <li>
+  //         <label>Friend name</label>
+  //         <input type="text"></input>
+  //       </li>
+  //       <li>
+  //         <label>Image URL</label>
+  //         <input type="text"></input>
+  //       </li>
+  //       <button className="button">Add</button>
+  //     </ul>
+  //   </div>
+  // );
 }
 
-function Bill() {
+function FormSplitBill() {
   return (
-    <div>
-      <h2>Split a bill with sarah</h2>
-      <div>
-        <label>Bill value</label>
-        <input type="number"></input>
-      </div>
-      <div>
-        <label>Your expense</label>
-        <input type="number"></input>
-      </div>
-      <div>
-        <label>Sarah's expense</label>
-        <input type="number"></input>
-      </div>
-      <div>
-        <label>Who is paying the bill?</label>
-        <select>
-          <option value="1"></option>
-          <option value="2"></option>
-          <option value="3"></option>
-        </select>
-      </div>
-      <button className="button">Split bill</button>
-    </div>
+    <form className="form-split-bill">
+      <h2>Split a bill with X</h2>
+
+      <label>💰 Bill value</label>
+      <input type="text" />
+
+      <label>🧍‍♀️ Your expense</label>
+      <input type="text" />
+
+      <label>👬 X's expense</label>
+      <input type="text" disabled />
+
+      <label>🤑 Who is paying the bill?</label>
+      <select>
+        <option value="user">You</option>
+        <option value="Friend">X</option>
+      </select>
+
+      <Button>Split bill</Button>
+    </form>
   );
+  // return (
+  //   <div>
+  //     <h2>Split a bill with sarah</h2>
+  //     <div>
+  //       <label>Bill value</label>
+  //       <input type="number"></input>
+  //     </div>
+  //     <div>
+  //       <label>Your expense</label>
+  //       <input type="number"></input>
+  //     </div>
+  //     <div>
+  //       <label>Sarah's expense</label>
+  //       <input type="number"></input>
+  //     </div>
+  //     <div>
+  //       <label>Who is paying the bill?</label>
+  //       <select>
+  //         <option value="1"></option>
+  //         <option value="2"></option>
+  //         <option value="3"></option>
+  //       </select>
+  //     </div>
+  //     <button className="button">Split bill</button>
+  //   </div>
+  // );
 }
