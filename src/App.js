@@ -30,6 +30,8 @@ function Button({ children, onClick }) {
 }
 
 export default function App() {
+  const [friends, setFriends] = useState(initialFriends);
+  1;
   const [showAddFriend, setShowAddFriend] = useState(false);
 
   function handleShowAddFriend() {
@@ -39,7 +41,7 @@ export default function App() {
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList />
+        <FriendsList friends={friends} />
         {showAddFriend && <FormAddFriend />}
         <Button onClick={handleShowAddFriend}>
           {showAddFriend ? "Close" : "Add friend"}
@@ -50,9 +52,7 @@ export default function App() {
   );
 }
 
-function FriendsList() {
-  const friends = initialFriends;
-
+function FriendsList({ friends }) {
   return (
     <ul>
       {friends.map((friend) => (
@@ -116,13 +116,41 @@ function Friend({ friend }) {
 }
 
 function FormAddFriend() {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!name || !image) return;
+
+    const id = crypto.randomUUID();
+    const newFriend = {
+      id,
+      name,
+      image: `${image}?=${id}`,
+      balance: 0,
+    };
+
+    setName("");
+    setImage("https://i.pravatar.cc/48");
+  }
+
   return (
-    <form className="form-add-friend">
+    <form className="form-add-friend" onSubmit={handleSubmit}>
       <label>👬 Friend name</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
 
       <label>🌄 Image URL</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
 
       <Button>Add</Button>
     </form>
